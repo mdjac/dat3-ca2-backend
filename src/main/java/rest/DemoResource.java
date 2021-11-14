@@ -75,6 +75,7 @@ public class DemoResource {
     }
     
     @GET
+    @RolesAllowed({"user","admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Path("threads")
     public void getFromThreads(@Suspended final AsyncResponse ar) {
