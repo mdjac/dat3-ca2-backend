@@ -48,6 +48,22 @@ public class UserFacade {
         return user;
     }
     
+    public User getUser(String username) throws API_Exception {
+        EntityManager em = emf.createEntityManager();
+        User user;
+        try {
+            user = em.find(User.class, username);
+            if (user == null) {
+                throw new API_Exception("User not found");
+            }
+        } finally {
+            em.close();
+        }
+        return user;
+    }
+    
+    
+    
     public UserDTO createUser(UserDTO userDTO) throws Exception {
        User user = userDTO.getEntity();
        EntityManager em = emf.createEntityManager();

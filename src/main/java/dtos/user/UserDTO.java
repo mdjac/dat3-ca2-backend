@@ -17,10 +17,12 @@ public class UserDTO {
     private String username;
     private String password;
     private List<RoleDTO> roles = new ArrayList<>();
+    private List<CarDTO> cars = new ArrayList<>();
 
     public UserDTO(User user) {
         this.username = user.getUserName();
         user.getRoleList().forEach(role->this.roles.add(new RoleDTO(role)));
+        user.getCars().forEach(car->this.cars.add(new CarDTO(car)));
     }
 
     public UserDTO() {

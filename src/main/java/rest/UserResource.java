@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -31,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  * REST Web Service
@@ -45,6 +47,9 @@ public class UserResource {
     
     @Context
     private UriInfo context;
+    
+    @Context
+    SecurityContext securityContext;
 
     /**
      * Creates a new instance of UserResource
@@ -58,6 +63,17 @@ public class UserResource {
     public Response createUser(String jsonString) throws API_Exception, Exception {
         UserDTO userDTO = gson.fromJson(jsonString, UserDTO.class);
         UserDTO newUserDTO = USER_FACADE.createUser(userDTO);
+        return Response.ok().entity(gson.toJson(newUserDTO)).build();
+    }
+    
+    @GET
+    @RolesAllowed({"user","admin"})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUser() throws API_Exception, Exception {
+        String username = securityContext.getUserPrincipal().getName();
+        User user = USER_FACADE.getUser(username);
+        UserDTO newUserDTO = new UserDTO(user);
         return Response.ok().entity(gson.toJson(newUserDTO)).build();
     }
 }
