@@ -10,12 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
+@NamedQuery(name = "User.deleteAllRows", query = "DELETE from User")
 @Table(name = "users")
 public class User implements Serializable {
 
@@ -33,8 +35,12 @@ public class User implements Serializable {
   @JoinTable(name = "user_roles", joinColumns = {
     @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
     @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
+  
   @ManyToMany
   private List<Role> roleList = new ArrayList<>();
+  
+  @ManyToMany(mappedBy = "users")
+  private List<Car> cars;
 
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
@@ -57,6 +63,7 @@ public class User implements Serializable {
     public User(String userName, String userPass) {
         this.userName = userName;
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
+        this.cars = new ArrayList<>();
     }
 
   public String getUserName() {
@@ -86,5 +93,22 @@ public class User implements Serializable {
   public void addRole(Role userRole) {
     roleList.add(userRole);
   }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
+    }
+    
+    public void addCar(Car car){
+        this.cars.add(car);
+        if(!car.getUsers().contains(this)){
+            car.addUser(this);
+        }
+    }
+  
+  
 
 }
