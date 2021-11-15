@@ -114,10 +114,8 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 43 * hash + Objects.hashCode(this.userName);
-        hash = 43 * hash + Objects.hashCode(this.roleList);
-        hash = 43 * hash + Objects.hashCode(this.cars);
+        int hash = 3;
+        hash = 47 * hash + Objects.hashCode(this.userName);
         return hash;
     }
 
@@ -133,8 +131,13 @@ public class User implements Serializable {
             return false;
         }
         final User other = (User) obj;
+        if (!Objects.equals(this.userName, other.userName)) {
+            return false;
+        }
         return true;
     }
+
+    
 
    
 

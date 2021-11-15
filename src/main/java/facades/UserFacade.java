@@ -1,6 +1,7 @@
 package facades;
 
 import dtos.user.UserDTO;
+import entities.Car;
 import entities.User;
 import entities.Role;
 import errorhandling.API_Exception;
@@ -102,6 +103,15 @@ public class UserFacade {
                 User newUser = em.find(User.class, userDto.getUsername());
                 user.setUserPass(newUser.getUserPass());
             }
+            
+        user.getCars().forEach(car->{
+          if(car.getId() != null){
+            Car tmpCar = em.find(Car.class, car.getId());
+            car.setUsers(tmpCar.getUsers());
+            car.addUser(user);
+          }
+          em.merge(car);
+        });
         User updatedUser = em.merge(user);
         
         em.getTransaction().commit();
