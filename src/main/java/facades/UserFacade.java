@@ -89,5 +89,23 @@ public class UserFacade {
         }
         return new UserDTO(user);
     }
+    
+    public UserDTO updateUser (UserDTO userDto) throws API_Exception {
+        User user = userDto.getEntity();
+        if (user.getUserName() == null)
+            throw new API_Exception("No User can be updated when id is missing");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+            
+            //Used to make sure that if receiving a DTO with empty password that we do not override the users current password with null
+            if(userDto.getPassword() == null){
+                User newUser = em.find(User.class, userDto.getUsername());
+                user.setUserPass(newUser.getUserPass());
+            }
+        User updatedUser = em.merge(user);
+        
+        em.getTransaction().commit();
+        return new UserDTO(updatedUser);
+    }
 
 }

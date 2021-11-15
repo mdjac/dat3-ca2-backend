@@ -28,6 +28,15 @@ public class CarDTO {
         this.workshop = new WorkShopDTO(car.getWorkshop());
     }
     
+    public Car getEntity(){
+        Car c = new Car(this.brand, this.model,this.year);
+        if(this.id != null){
+            c.setId(this.id);
+        }
+        c.setWorkshop(this.workshop.getEntity());
+        return c;
+    }
+    
     
     
 }

@@ -103,6 +103,11 @@ public class Car implements Serializable {
         }
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
+
 
     
     

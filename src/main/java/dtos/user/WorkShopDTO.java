@@ -24,6 +24,14 @@ public class WorkShopDTO {
         this.city = workshop.getCity();
     }
     
+    public Workshop getEntity(){
+        Workshop w = new Workshop(this.name,this.city);
+        if(this.id != null){
+            w.setId(this.id);
+        }
+        return w;
+    }
+    
     
     
 }

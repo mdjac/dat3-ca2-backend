@@ -32,6 +32,19 @@ public class UserDTO {
     public User getEntity(){
         User user = new User(this.username, this.password);
         this.roles.forEach(roleDTO->user.addRole(roleDTO.getEntity()));
+        this.cars.forEach(carDTO->user.addCar(carDTO.getEntity()));
         return user;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    
+    
+    
+    
 }

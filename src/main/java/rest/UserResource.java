@@ -76,4 +76,18 @@ public class UserResource {
         UserDTO newUserDTO = new UserDTO(user);
         return Response.ok().entity(gson.toJson(newUserDTO)).build();
     }
+    
+    @PUT
+    @RolesAllowed({"user","admin"})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response editUser(String jsonString) throws API_Exception, Exception {
+        UserDTO userDTO = gson.fromJson(jsonString, UserDTO.class);
+        String username = securityContext.getUserPrincipal().getName();
+        if(!(username.equals(userDTO.getUsername()))){
+            throw new API_Exception("You cant edit another username than your own");
+        }
+        UserDTO newUserDTO = USER_FACADE.updateUser(userDTO);
+        return Response.ok().entity(gson.toJson(newUserDTO)).build();
+    }
 }
